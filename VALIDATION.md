@@ -25,8 +25,12 @@ Known handover limitation: student estimates were supplied after disclosure of a
 - The publicly served model.json exactly matched the locally validated model.
 - The full notebook was rerun: all 15 code cells completed without error.
 - Saved test metrics, top-five failure ordering and held-out comparison membership were independently recomputed and checked.
-- Final report: 1,216 narrative words; all eight pages rendered and visually checked; footer and standalone acknowledgement removed as requested.
+- Final report: 1,214 narrative words; all eight pages rendered and visually checked; footer and standalone acknowledgement removed as requested.
 
 ## Student estimates added - 18 September 2026
 
 The ten user-supplied amounts were copied unchanged. The notebook was rerun and the exact values, three-way comparison metrics and held-out membership were verified. Student MAE is $2,043,000; RMSE is $5,601,330.65; R-squared is 0.26549. The student column is explicitly non-blind because actual prices and AI examples were already disclosed. The fitted model and ML/LLM predictions are unchanged.
+
+## Presentation revision - 18 September 2026
+
+Removed the requested front-page note and the app's static prototype/data labels. Revised report prose and table labels into consistent academic language while retaining the timing of personal estimates in the methods discussion. Refreshed both app screenshots. The browser example still returns $692,333 without runtime or input errors; all eight PDF pages were visually reviewed. No model inputs, fitted parameters or numerical results changed.

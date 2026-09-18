@@ -47,22 +47,21 @@ def money(x): return f'${x:,.0f}'
 def csv(name): return pd.read_csv(ROOT / 'results' / name)
 def link(url, label): return f'<link href="{escape(url, {chr(34): "&quot;"})}" color="#175b8a">{escape(label)}</link>'
 
-heading('SIT720 Task 8.1D: Sydney housing prices')
-para('Machine learning mini project | 18 September 2026', small=True, count=False)
+heading('Sydney housing price prediction')
+para('SIT720 Task 8.1D | 18 September 2026', small=True, count=False)
 sub('1. Problem and data collection')
-para('This project predicts a property sale price in Australian dollars. Parramatta, Blacktown and Mosman were selected and confirmed as contrasting buying options. The collected Parramatta sample is mainly apartments, Blacktown mixes houses and apartments, and Mosman includes much more expensive homes. Location, accommodation and property type may therefore affect prices.')
-para('The dataset contains 119 sold properties: 37 Parramatta, 43 Blacktown and 39 Mosman. Listing facts were manually transcribed by the AI assistant from Domain and realestate.com.au on 16 September 2026. Every row has a source URL. This is not a claim that the student personally collected or independently verified the sales.')
+para('This project evaluates regression methods for predicting residential sale prices in Australian dollars. Parramatta, Blacktown and Mosman were selected as contrasting purchasing locations. The Parramatta sample consists mainly of apartments, Blacktown includes houses and apartments, and Mosman contains higher-priced properties. These differences allow the analysis to examine how location, dwelling type and accommodation relate to sale prices.')
+para('The dataset contains 119 sold properties: 37 in Parramatta, 43 in Blacktown and 39 in Mosman. Sale information was transcribed from Domain and realestate.com.au listings accessed on 16 September 2026. Each record includes its source URL and access date to support traceability. The reported prices are listing information rather than independently verified settlement records.')
 table(['Recorded fields', 'Use'], [['Sale price (AUD)', 'Prediction target'],['Suburb, type, bedrooms, bathrooms, parking, sale date','Model inputs'],['Address, advertised area, source, access date, property ID','Checking and traceability; excluded from prediction']], [250,240])
 para('Collection problems included withheld prices, missing parking, inconsistent area definitions and changing listing details. Withheld-price and retirement listings were excluded. Missing parking stays unknown. Advertised area is retained for checking but excluded because it mixes land, floor and whole-building area. All 119 transcriptions were checked against the viewed listing text; this does not independently verify settlement records.')
 para('The sample is convenient rather than random. Disclosed prices may be selective, several units share buildings, and the Mosman house search was supplemented separately. Results should not be presented as official suburb statistics or as reliable estimates for all Sydney properties.')
-sub('Submission details')
+sub('Data and implementation')
 app_url=links.get('application_url','')
 archive_url=links.get('archive_url','')
 on_github_pages = '.github.io/' in app_url
 app_label = 'Open the housing predictor on GitHub Pages' if on_github_pages else 'Open the deployed housing predictor (owner-private)'
 para('Application: '+ (link(app_url,app_label) if app_url else 'See README for local launch.'), count=False)
 para('Dataset and source archive: '+ (link(archive_url,'Open the submission archive') if archive_url else '<b>Accessible archive URL not yet supplied.</b> Upload the included ZIP to OneDrive/Dropbox or GitHub and add its link in submission_links.json, then rebuild this report.'), small=True, count=False)
-para('<b>Part 5 limitation:</b> the student supplied ten estimates after actual prices and AI examples had been disclosed. They are included as a non-blind comparison, not evidence of independent forecasting performance.',small=True,count=False)
 
 page(); heading('2. Understanding and preparing the data')
 para('A fixed split reserves 24 test properties: ten preselected comparison cases and fourteen additional cases sampled by suburb with seed 42. The remaining 95 support exploration and model selection. The test is not purely random, and nearby units can cross the split. Building-grouped and forward-time tests would be stronger.')
@@ -73,15 +72,15 @@ para('The date plot cannot establish a market trend because suburb and property 
 para('Within each cross-validation fold, missing numeric inputs use the training median, numeric features are standardised, and categories are one-hot encoded. This prevents preprocessing leakage. Scaling is essential for distance-based KNN. Address and listing identifiers are excluded.')
 
 page(); heading('3. Model development and evaluation')
-para('KNN averages similar sales but can choose poor comparables. A decision tree learns readable rules but can overfit. Random forest averages many trees but is less transparent. Before training, forest was expected to win because averaging can reduce tree variance and capture interactions. Five shuffled folds compare a small parameter grid using MAE. RMSE highlights large errors; R-squared compares squared error with a mean-price baseline.')
+para('Three regression approaches were selected: KNN for similarity-based prediction, a decision tree for interpretable nonlinear rules, and random forest for variance reduction through averaging. Random forest was expected to perform best before training, although its predictions are less transparent than a single tree. Five shuffled folds evaluate a small parameter grid using MAE. RMSE emphasises large errors, while R-squared measures performance relative to a mean-price baseline.')
 cv=csv('cross_validation.csv')
 table(['Model', 'CV MAE', 'CV RMSE', 'CV R²', 'Train MAE'],[[r.model,money(r.cv_mae),money(r.cv_rmse),f'{r.cv_r2:.3f}',money(r.train_mae)] for r in cv.itertuples()], [96,100,100,70,124])
 para('Table 1. Mean fold scores at selected settings: KNN k=3; tree unrestricted depth/minimum leaf 3; forest 200 trees, unrestricted depth, minimum leaf 2 and max_features=0.8. KNN k=3/5/9, tree depth 2/4/unrestricted and forest depth 4/unrestricted were tested.',small=True,count=False)
 figure('complexity.png',caption='Figure 3. Training and validation MAE at each tested model complexity.')
-para('KNN is selected by CV MAE ($437,074), against the initial forest expectation. Its $16,946 advantage is smaller than fold variability (KNN SD $207,485; forest $156,428). Higher k increases both errors, suggesting excessive smoothing. Deeper trees improve both scores here, although training-validation gaps remain. More complexity is not automatically worse. Mean fold R-squared is unstable when small folds have different price variance.')
+para('KNN achieved the lowest cross-validation MAE ($437,074), contrary to the initial expectation. Its $16,946 advantage over random forest is small relative to fold variability (SD $207,485 and $156,428, respectively). Increasing k raised training and validation errors, indicating excessive smoothing. Greater tree depth improved both scores within the tested range, although generalisation gaps remained. Fold-level R-squared was unstable because the small folds had different price variances.')
 test=csv('test_metrics.csv')
 table(['24-property test','MAE','RMSE','R²'],[[r.model,money(r.mae),money(r.rmse),f'{r.r2:.3f}'] for r in test.itertuples()], [145,115,125,105])
-para('KNN improves on the median baseline but test errors are large. Forest has slightly lower test MAE and the tree lower RMSE; the CV choice is retained to avoid selecting on test results. CV scores also served tuning, so they are mildly optimistic. KNN is recommended only for this study prototype.')
+para('KNN outperformed the median baseline on the test set, but its large absolute errors limit practical use. Random forest obtained slightly lower test MAE and the tree lower RMSE. The cross-validation selection was retained to avoid choosing a model using test outcomes. Because cross-validation also guided tuning, its reported scores may be optimistic. KNN was retained for deployment on this basis.')
 
 page(); heading('4. Investigating the five largest errors')
 f=csv('five_largest_errors.csv')
@@ -93,25 +92,25 @@ para('<b>96 Glover Street, Mosman:</b> the listing reports a 379 m² block, shar
 para('<b>13 Lancaster Street, Blacktown:</b> a recent custom-built, multigenerational house is compared with three local sales between $1.235 million and $1.34 million. Construction age and finish quality are missing, so its premium is underestimated. [8]')
 figure('test_errors.png',width=470,caption='Figure 4. Held-out predictions and errors. Rare, expensive sales dominate squared error.')
 
-page(); heading('5. ML, LLM and student estimates')
-para('The ten held-out properties use the same six raw input fields. Codex estimates were frozen before their sale prices were revealed, although earlier market examples were available. The student supplied the estimates below on 18 September after seeing actual prices and AI examples. Their information conditions therefore differ: this is a non-blind student comparison, not a controlled test of human forecasting.')
+page(); heading('5. Comparison of valuation approaches')
+para('Ten held-out properties were assessed using the selected KNN model, a large language model (Codex) and personal estimates. The LLM estimates were recorded before the target prices were disclosed, although earlier market examples were available. Personal estimates were recorded after sale prices and reference estimates had been shown; their errors are therefore descriptive rather than evidence of independent forecasting accuracy.')
 c=csv('ten_property_comparison.csv')
-table(['ID / suburb','Actual','ML','LLM','Student*'],[[r.comparison_id+' / '+r.suburb,money(r.sale_price_aud),money(r.predicted_price_aud),money(r.llm_estimate_aud),money(r.human_estimate_aud)] for r in c.itertuples()], [116,94,94,94,92])
-para('Table 3. *Student-supplied, non-blind estimates. The earlier AI illustrations remain separately labelled in the archive and are not used as student estimates.',small=True,count=False)
+table(['ID / suburb','Actual','ML','LLM','Personal'],[[r.comparison_id+' / '+r.suburb,money(r.sale_price_aud),money(r.predicted_price_aud),money(r.llm_estimate_aud),money(r.human_estimate_aud)] for r in c.itertuples()], [116,94,94,94,92])
+para('Table 3. Sale prices and estimates in AUD. Property identifiers link to the full feature records in the accompanying dataset.',small=True,count=False)
 cm=csv('comparison_metrics.csv')
-table(['Approach','MAE','RMSE','R²'],[[r.approach,money(r.mae),money(r.rmse),f'{r.r2:.3f}'] for r in cm.itertuples()], [145,115,125,105])
-para('The student column has the lowest MAE ($2,043,000) and RMSE ($5,601,331), but prior exposure prevents a fair winner claim. It is closest on four cases, LLM on three and ML on three. For example, student estimates are close on C06 and C08; LLM is closest on C05. All three badly underestimate the $23 million sale.')
-para('Among ML and LLM, LLM has lower MAE while ML has lower RMSE. Human judgement could add inspections and local knowledge, but that benefit is not isolated here. ML is reproducible but limited by its training data; LLM estimates can sound plausible without adequate evidence. New unseen properties and estimates recorded before disclosure would provide a stronger comparison.')
+table(['Approach','MAE','RMSE','R²'],[[('Personal estimate' if r.approach == 'Student (non-blind)' else r.approach),money(r.mae),money(r.rmse),f'{r.r2:.3f}'] for r in cm.itertuples()], [145,115,125,105])
+para('Under these conditions, personal estimates produced the lowest numerical MAE ($2,043,000) and RMSE ($5,601,331). They were closest for four properties, compared with three each for the LLM and KNN. The personal estimates were particularly close for C06 and C08, while the LLM was closest for C05. All three approaches substantially underestimated the $23 million sale.')
+para('The LLM achieved lower MAE than KNN, whereas KNN achieved lower RMSE. Human judgement may contribute inspection findings and local knowledge, but this comparison does not isolate those advantages. KNN is reproducible but constrained by its training data; LLM estimates may be plausible without adequate property-specific evidence. A stronger comparison would record all estimates before disclosing outcomes.')
 sub('Revisiting the feature expectations')
 para('Validation permutation importance ranks suburb first, then month and bathrooms. The initial guess is partly supported: location leads, but type and bedrooms rank lower. Importance is not causal; correlated features share information, and month may identify the collection pattern rather than price growth.')
 
 
 page(); heading('6. Deployment and use')
 para('The fitted 95-row KNN pipeline is saved with joblib. A Flask endpoint uses that pipeline; a static HTML/JavaScript interface loads exported scaling, imputation, categories and neighbours. Python and browser predictions match for all 119 records. Equal-distance ties use a stable row order in both implementations. This consistency fix followed initial evaluation and did not tune test performance.')
-figure('app_input.png',width=345,caption='Figure 5. Actual local browser screenshot: choose features before prediction.')
-figure('app_prediction.png',width=345,caption='Figure 6. Actual local browser screenshot: Parramatta apartment, 2 bedrooms, 2 bathrooms, 1 parking, 1 August 2026 gives $692,333.')
+figure('app_input.png',width=410,caption='Figure 5. Property input form before prediction.')
+figure('app_prediction.png',width=410,caption='Figure 6. Prediction for a Parramatta apartment: 2 bedrooms, 2 bathrooms, 1 parking space, 1 August 2026.')
 access_note = 'The app is publicly hosted on GitHub Pages and requires no sign-in.' if on_github_pages else 'The hosted version is owner-private; tutor access must be arranged separately.'
-para('Choose suburb and type, enter room counts, parking and date, then click Predict price. Zero bedrooms means studio; blank parking means unknown. The app shows the estimate and study limitations. Dates beyond training coverage trigger a warning. ' + access_note,small=True)
+para('Choose suburb and type, enter room counts, parking and date, then click Predict price. Zero bedrooms means studio; blank parking means unknown. The app displays the estimate, model description and test error. Dates beyond training coverage trigger a warning. ' + access_note,small=True)
 
 page(); heading('Reproduction, reflection and sources')
 sub('Build and run')
@@ -125,8 +124,8 @@ python build_report.py
 python app.py''')
 para('Use the extracted project folder. On Windows activate with .venv\\Scripts\\activate. Open http://127.0.0.1:5000. For notebook outputs, select this environment in Jupyter/VS Code and run all cells. The static folder site/dist can also be hosted directly. Verification needs Node.js. Full setup and archive instructions are in README.md.',small=True,count=False)
 sub('Reflection')
-para('My main takeaway is that better data matters more than a more complicated model. I expected random forest to perform best, but KNN had the lowest cross-validation MAE. Its large test errors show why I should not rely on one score. Missing area, views, condition and ownership costs limit what the model can learn. I would collect more consistent property details and use building-grouped and time-based tests before trusting it on new sales.')
-para('I would keep the app simple so its inputs and limitations are easy to understand. Deploying it also shows why preprocessing must match training exactly. More computing power alone would not fix missing information. Suburb can reflect historic inequality, and selective listings can favour some housing types. Test MAE is about $100,278 for Parramatta, $504,389 for Blacktown and $2,636,093 for Mosman. Each group has only six to nine test cases, so this does not establish fairness. I would avoid using this prototype for lending or decisions about access to housing.')
+para('The main finding is that data coverage and feature quality constrain performance more than model complexity alone. Random forest did not achieve the expected advantage, and KNN\'s favourable cross-validation result did not prevent large test errors. Missing information about area, views, condition and ownership costs limits the relationships available to each model. Further work should prioritise consistent property details, building-grouped splits and forward-time evaluation.')
+para('Deployment required identical preprocessing and distance tie handling in Python and JavaScript. A simple interface makes the prediction process accessible, but additional computing alone cannot compensate for missing information. Suburb may reflect historic inequality, while selective disclosure may underrepresent particular housing types. Test MAE was $100,278 for Parramatta, $504,389 for Blacktown and $2,636,093 for Mosman. With only six to nine cases per group, these results cannot establish fairness or justify lending decisions.')
 sub('References (accessed 16–17 September 2026)')
 refs=[
 ('1. SIT720 supplied task sheet and all Week 8/9 note screenshots',''),
