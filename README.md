@@ -1,83 +1,74 @@
-# SIT720 Task 8.1D - Sydney housing prices
+# Sydney housing price prediction
 
-Beginner-style worked project using 119 real sold-property records: Parramatta 37, Blacktown 43, Mosman 39. The notebook compares KNN, a decision tree and random forest with five-fold cross-validation. It keeps 24 properties out of training and shows the five largest errors.
+SIT720 Task 8.1D compares K-nearest neighbours, a decision tree and random forest using 119 sold-property listings from Parramatta, Blacktown and Mosman. Five-fold cross-validation selects the model using 95 development records; 24 properties are reserved for testing.
 
-## Before submitting
+[Open the housing predictor](https://iamalexthomas.github.io/sit720-sydney-housing/)
 
-Before submitting, note these limitations:
+## Project files
 
-1. The student supplied all ten personal estimates. They were supplied after actual prices and AI examples had been shown, so they are labelled **non-blind student estimates**. The comparison is complete as a descriptive table, but it does not demonstrate independent human forecasting. `data/student_estimate_protocol.md` records the conditions.
-2. The standalone GenAI acknowledgement was removed at the student's request. The task sheet asks for an acknowledgement, so this requirement is currently unmet.
+| File or folder | Contents |
+| --- | --- |
+| `SIT720_8_1D.ipynb` | Executed analysis, plots, model evaluation and valuation comparison |
+| `output/pdf/SIT720_8_1D_report.pdf` | Final report |
+| `data/` | Property records, source URLs, transcription checks, split and comparison estimates |
+| `train.py` | Runnable analysis and model training |
+| `stable_knn.py` | KNN with consistent handling of equal-distance neighbours |
+| `model/housing_model.joblib` | Fitted preprocessing and prediction pipeline |
+| `results/`, `figures/` | Saved results, charts and application screenshots |
+| `app.py`, `prediction.py` | Flask application and Python prediction endpoint |
+| `site/dist/` | Static web application and exported model |
+| `export_model.py` | Export the fitted KNN model for browser prediction |
+| `verify_project.py` | Data, split, prediction and endpoint checks |
+| `build_report.py`, `package_submission.py` | Rebuild the report and submission ZIP |
 
-Review the analysis and sources and understand the code. `NOTES_GUIDE.md` connects the project to every supplied notes screenshot and provides viva questions. The student's own reflections and data verification are still important.
+## Setup
 
-## Files
-
-- `SIT720_8_1D.ipynb`: notebook with executed cells, tables and plots.
-- `output/pdf/SIT720_8_1D_report.pdf`: concise report with plots, error cases, comparison, screenshots, references and code extracts.
-- `data/housing_sales.csv`: real listing-reported sold-property facts, sources and dates.
-- `data/collection_log.md`: collection method, exclusions, inconsistencies and biases.
-- `data/comparison_blind.csv`: original features and student-supplied estimate column; historical filename, non-blind estimates.
-- `data/llm_estimates.csv`: predictions frozen before selected prices were revealed.
-- `data/illustrative_estimates.csv`: AI-generated demonstration values requested by the student; NOT human estimates.
-- `train.py`: Python equivalent of the notebook's code cells.
-- `stable_knn.py`: deterministic equal-distance tie handling for KNN.
-- `model/housing_model.joblib`: selected pipeline trained only on development data.
-- `app.py`, `prediction.py`: small Flask app and Python prediction endpoint.
-- `site/dist/`: browser app, exported model and local JavaScript inference.
-- `results/`, `figures/`: computed outputs, charts and genuine app screenshots.
-- `failure_analysis.md`: detailed discussion of the five largest held-out errors.
-
-## Setup and reproduce
-
-Tested using Python 3.14 on Linux. In a terminal, enter the extracted project folder:
+Tested with Python 3.14 on Linux. Run these commands from the project folder:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python train.py
-python export_model.py
-python build_report.py
 ```
 
-On Windows, activate with `.venv\Scripts\activate`. For the notebook, open `SIT720_8_1D.ipynb` in VS Code/Jupyter using this environment, then Restart Kernel and Run All. Install JupyterLab if no notebook editor is already available: `python -m pip install jupyterlab`, then `jupyter lab`. Run from this project folder. Paths are relative; no live web requests or paid API keys are needed for analysis or prediction.
+On Windows, activate the environment with `.venv\Scripts\activate`. Open the notebook in VS Code or Jupyter, select this environment, then restart the kernel and run all cells. If needed, install JupyterLab with `python -m pip install jupyterlab`.
 
-The split seed is 42. Ten preselected comparison cases plus 14 additional seeded cases form the test set. All imputation, scaling and category encoding are fitted within the five CV folds. Hyperparameters and model choice use development CV only. The selected model remains trained on 95 examples; it is not refitted on test labels. A tie-handling consistency fix was made during deployment verification, after initial evaluation, without optimising test performance. Results shown are for that final consistent implementation.
+## Reproduce the results
 
-## Run and use the app
+```bash
+python train.py
+python export_model.py
+python verify_project.py
+python build_report.py
+python package_submission.py
+```
+
+Verification also requires Node.js. The dataset is included, so training and prediction do not require live listing downloads or API keys. The report uses the saved results and figures. The ZIP is written to the parent directory.
+
+Preprocessing is fitted within each cross-validation fold. The split uses seed 42 and includes ten preselected comparison properties plus fourteen additional cases sampled by suburb. Model selection uses development cross-validation; the saved model is trained on the 95 development properties.
+
+## Run the application
 
 ```bash
 python app.py
 ```
 
-Open `http://127.0.0.1:5000`. Choose suburb/type, enter bedrooms, bathrooms, parking and a date, then click **Predict price**. Zero bedrooms means studio; blank parking means unknown. Example: Parramatta, Apartment, 2 bedrooms, 2 bathrooms, 1 parking, 1 August 2026 gives approximately **$692,333**. The app rounds only the displayed result. It warns about dates outside training coverage and rejects unsupported suburbs and invalid counts.
+Open `http://127.0.0.1:5000`. Select the suburb and property type, enter room counts, parking and a sale date, then click **Predict price**. Use zero bedrooms for a studio and leave parking blank when unknown.
 
-The HTML page runs the exported KNN pipeline locally in the browser. The Flask version also exposes `POST /api/predict` for JSON input using the original Python model. The browser and Python predictions were checked for equality across all collected rows. `verify_project.py` repeats meaningful data, inference and endpoint checks and requires Node.js to run the JavaScript comparison.
+Example: a Parramatta apartment with two bedrooms, two bathrooms, one parking space and a sale date of 1 August 2026 returns approximately **$692,333**.
 
-A build-free alternative is `python -m http.server 8000 --directory site/dist`, then open `http://127.0.0.1:8000`. Do not double-click index.html because the browser must load model.json through HTTP. Host the entire `site/dist` directory on a static host to deploy the browser version. It needs no Python server or API key on the host.
-
-Hosted application: https://iamalexthomas.github.io/sit720-sydney-housing/
-
-Dataset and source repository: https://github.com/iamalexthomas/sit720-sydney-housing
-
-The GitHub Pages application is public. The repository includes the dataset, executed notebook, model, source and PDF, and provides the accessible GitHub alternative requested in the task sheet.
-
-## Rebuild the report and ZIP
-
-Set the actual application/archive URLs in `submission_links.json`, then run:
+To serve the static version:
 
 ```bash
-python build_report.py
-python package_submission.py
+python -m http.server 8000 --directory site/dist
 ```
 
-The ZIP contains source, dataset, model, executed notebook, outputs and report, and excludes virtual environments, temporary browsing returns and Git credentials. If changing data, retrain and rerun the notebook first. If a different model wins, the KNN-only browser exporter will stop with a clear error rather than silently deploy a different algorithm.
+Open `http://127.0.0.1:8000`. Serve the files over HTTP so the browser can load `model.json`. The GitHub Pages workflow in `.github/workflows/pages.yml` publishes `site/dist` when changes are pushed to `main`.
 
-## Limitations
+## Data and interpretation
 
-The data are an AI-assisted manual transcription of public listing cards, not independently verified settlement data. Advertised area is mixed and excluded from modelling. Suburb, type and sale date are confounded, buildings can appear across splits, and the convenience comparison sample includes rare luxury homes. Test MAE is about $1.20 million; this is an educational prototype, not a professional valuation or lending tool.
+The dataset contains 37 Parramatta, 43 Blacktown and 39 Mosman properties transcribed from Domain and realestate.com.au listings. Source URLs and access dates are retained in the CSV. Advertised area is excluded from modelling because its definitions are inconsistent; missing parking is imputed within the fitted pipeline.
 
-## GitHub Pages
+The notebook compares model, LLM and personal estimates for ten held-out properties. Personal estimates were recorded after prices and example estimates were available, so their errors describe agreement with the outcomes rather than independent forecasting performance. Recording conditions and the LLM prompt are included in the notebook.
 
-A ready-to-run deployment workflow is included at `.github/workflows/pages.yml`. See `GITHUB_PAGES.md` for the repository layout and setup. The workflow publishes the static predictor from `site/dist`.
+The selected KNN model has a test MAE of approximately $1.20 million. Rare luxury properties account for several large errors; the three-suburb sample and available features limit the conclusions that can be drawn.

@@ -1,2 +1,2 @@
-Approximate narrative word count: 1214
-Excludes tables, figure captions, code, references and setup instructions.
+Approximate narrative word count: 1204
+Excludes tables, figure captions, code and setup instructions.

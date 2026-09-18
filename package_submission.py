@@ -3,7 +3,7 @@ from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 ROOT = Path(__file__).resolve().parent
 output = ROOT.parent / 'SIT720_8_1D_submission.zip'
-excluded = {'.git', '.venv', '__pycache__', '.ipynb_checkpoints', 'node_modules'}
+excluded = {'.git', '.venv', '__pycache__', '.ipynb_checkpoints', 'node_modules', '.openai'}
 files = sorted(p for p in ROOT.rglob('*') if p.is_file()
                and not any(part in excluded for part in p.relative_to(ROOT).parts)
                and p.suffix not in {'.pyc', '.zip'}
