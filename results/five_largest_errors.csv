@@ -1,0 +1,6 @@
+property_id,address,suburb,sale_price_aud,property_type,bedrooms,bathrooms,parking,advertised_area_m2,sale_date,comparison_id,source_url,accessed_date,predicted_price_aud,signed_error_aud,absolute_error_aud,absolute_percentage_error
+M027,17 Morella Road,Mosman,23000000,House,4,3,2.0,961.1,2026-03-31,C10,https://www.realestate.com.au/sold/property-house-in-mosman/list-1,2026-09-16,5391000.0,-17609000.0,17609000.0,76.56086956521739
+M029,10 Cyprian Street,Mosman,8500000,House,4,3,2.0,556.4,2026-03-27,,https://www.realestate.com.au/sold/property-house-in-mosman/list-1,2026-09-16,5391000.0,-3109000.0,3109000.0,36.576470588235296
+B042,53 - 53A Pelleas Street,Blacktown,1700000,House,7,4,2.0,584.0,2026-07-29,C05,https://www.domain.com.au/sold-listings/blacktown-nsw-2148/?page=3,2026-09-16,4800000.0,3100000.0,3100000.0,182.35294117647058
+M024,96 Glover Street,Mosman,3390000,House,4,3,2.0,379.0,2026-06-02,C07,https://www.realestate.com.au/sold/property-house-in-mosman/list-1,2026-09-16,5383333.333333333,1993333.333333333,1993333.333333333,58.80039331366764
+B021,13 Lancaster Street,Blacktown,1900000,House,7,4,6.0,739.0,2026-08-22,,https://www.domain.com.au/sold-listings/blacktown-nsw-2148/?page=2,2026-09-16,1278333.3333333333,-621666.6666666667,621666.6666666667,32.719298245614034

@@ -1,0 +1,28 @@
+{
+  "selected_model": "KNN",
+  "development_n": 95,
+  "test_n": 24,
+  "total_n": 119,
+  "seed": 42,
+  "numeric": [
+    "bedrooms",
+    "bathrooms",
+    "parking",
+    "sale_month",
+    "bathrooms_per_bedroom"
+  ],
+  "categorical": [
+    "suburb",
+    "property_type"
+  ],
+  "test_metrics": {
+    "mae": 1202750.0000000002,
+    "rmse": 3731553.391102444,
+    "r2": 0.38377954349855625
+  },
+  "training_min_date": "2025-11-22",
+  "training_max_date": "2026-09-15",
+  "training_min_price": 320000,
+  "training_max_price": 11550000,
+  "human_complete": false
+}

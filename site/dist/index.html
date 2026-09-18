@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sydney Housing Price Predictor</title><meta name="description" content="A simple SIT720 property price prediction project for Parramatta, Blacktown and Mosman."><link rel="stylesheet" href="style.css"><script src="predict.js" defer></script><script src="app.js" defer></script></head>
+<body><main>
+<header><p class="course">SIT720 · MACHINE LEARNING MINI PROJECT</p><h1>Sydney housing price predictor</h1><p>Enter a property's details to estimate its sale price in Australian dollars.</p></header>
+<div class="columns"><section><h2>Property details</h2>
+<form id="property-form">
+<div class="fields"><label>Suburb<select name="suburb"><option>Parramatta</option><option>Blacktown</option><option>Mosman</option></select></label>
+<label>Property type<select name="property_type"><option>Apartment</option><option>House</option><option>Townhouse</option></select></label>
+<label>Bedrooms<input name="bedrooms" type="number" value="2" min="0" max="7" step="1" required><small>Use 0 for a studio.</small></label>
+<label>Bathrooms<input name="bathrooms" type="number" value="2" min="1" max="5" step="1" required></label>
+<label>Parking spaces<input name="parking" type="number" value="1" min="0" max="6" step="1"><small>Leave blank if unknown.</small></label>
+<label>Valuation date<input name="sale_date" type="date" value="2026-08-01" required><small>Dates in the data: Nov 2025 - Sep 2026.</small></label></div>
+<button id="predict-button" type="submit" disabled>Loading model…</button>
+</form><p id="error" role="alert"></p></section>
+<section class="result" aria-live="polite"><h2>Estimated sale price</h2><p id="price" class="price">Enter the details</p><p id="result-note">Select Predict price to see the model's estimate.</p><p id="input-warning" class="warning"></p>
+<hr><h3>About this estimate</h3><p>The model averages the prices of 3 similar training examples. Similarity includes suburb, type, rooms, parking and sale month.</p><p>It was trained on 95 properties and tested on 24. Its average absolute test error was about <strong>$1.20 million</strong>, with a few very large errors.</p><p class="warning">Study prototype only. It can miss views, condition, strata costs and unusual luxury features. This is not a professional valuation.</p></section></div>
+<footer>Data: 119 disclosed sales in Parramatta, Blacktown and Mosman. Sources: Domain and realestate.com.au. This small sample does not represent the whole Sydney market.</footer>
+</main></body></html>

@@ -1,0 +1,9 @@
+model,settings,train_mae,cv_mae
+KNN,{'model__n_neighbors': 3},317781.5789473684,437073.6842105264
+KNN,{'model__n_neighbors': 5},362295.7894736842,445622.10526315786
+KNN,{'model__n_neighbors': 9},443658.62573099416,484835.6725146199
+Decision tree,{'model__max_depth': 2},564410.1056497906,740983.846427755
+Decision tree,{'model__max_depth': 4},422154.1764699762,616947.2970568611
+Decision tree,{'model__max_depth': None},376493.6591478697,581341.5162907268
+Random forest,{'model__max_depth': 4},325821.7421541837,467450.7723416691
+Random forest,{'model__max_depth': None},303296.32412500156,454019.2739018542
