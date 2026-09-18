@@ -16,8 +16,8 @@ Checked against SIT720-8.1D-1.pdf. The scope is an educational housing-price pre
 | Complexity, under/overfit, revisit expectations, recommendation | Report Part 3, complexity plots and notebook interpretation | Done |
 | Five largest errors with case investigations | Report Part 4; failure_analysis.md and neighbour audit | Done |
 | Ten held-out ML and LLM estimates using matching inputs | IDs C01-C10, frozen LLM estimates, protocol and comparison | Done |
-| Student's own ten price estimates | No genuine personal estimates supplied; AI illustrations labelled post-hoc | INCOMPLETE: cannot treat generated guesses as human evidence |
-| Compare actual, ML, LLM and human outcomes | ML/LLM metrics and discussion complete; human ranking unavailable | PARTIAL: depends on genuine personal estimates |
+| Student's own ten price estimates | Ten values supplied directly by the student; recorded unchanged | Done, with non-blind protocol disclosed |
+| Compare actual, ML, LLM and student outcomes | Three-way table, MAE/RMSE/R-squared, case comparisons and limitations | Done descriptively; unequal information prevents a fair forecasting ranking |
 | Web app accepting features and returning learned-model prediction | Flask/local browser implementation; GitHub Pages workflow | Done; public Pages prediction verified |
 | App screenshots and build/run/use instructions | Report Part 6, figures, README.md and GITHUB_PAGES.md | Done |
 | Workflow reflection, ethics and improvements | Report reflection and notebook | Done; student should review drafted first-person wording |

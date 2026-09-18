@@ -33,5 +33,5 @@ All 13 Week 8 screenshots and all 11 Week 9 screenshots were reviewed. Their emb
 4. What is leakage? Information from validation/test examples influencing training or model choices.
 5. Why did the most expensive house fail? Its rare luxury context was missing and its price exceeded every training target.
 6. Why did one Blacktown house get overvalued? Its nearest neighbours included expensive Mosman properties because room counts and other numeric features affected distance strongly.
-7. Why not claim human judgement lost? No real human estimates were supplied. The illustrative values were AI-generated after outcomes were available.
+7. Why not claim the student beat the models? The student supplied estimates after actual prices and AI examples were shown. Their lower errors do not establish independent forecasting ability.
 8. What would you improve first? Collect more consistent, representative data and better location/condition features; then evaluate on later dates and separate buildings.

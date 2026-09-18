@@ -62,7 +62,7 @@ on_github_pages = '.github.io/' in app_url
 app_label = 'Open the housing predictor on GitHub Pages' if on_github_pages else 'Open the deployed housing predictor (owner-private)'
 para('Application: '+ (link(app_url,app_label) if app_url else 'See README for local launch.'), count=False)
 para('Dataset and source archive: '+ (link(archive_url,'Open the submission archive') if archive_url else '<b>Accessible archive URL not yet supplied.</b> Upload the included ZIP to OneDrive/Dropbox or GitHub and add its link in submission_links.json, then rebuild this report.'), small=True, count=False)
-para('<b>Part 5 limitation:</b> genuine personal estimates were not supplied. Requested invented values are labelled AI illustrations. This report does not claim a completed human-performance comparison. This personal-estimate requirement remains incomplete.',small=True,count=False)
+para('<b>Part 5 limitation:</b> the student supplied ten estimates after actual prices and AI examples had been disclosed. They are included as a non-blind comparison, not evidence of independent forecasting performance.',small=True,count=False)
 
 page(); heading('2. Understanding and preparing the data')
 para('A fixed split reserves 24 test properties: ten preselected comparison cases and fourteen additional cases sampled by suburb with seed 42. The remaining 95 support exploration and model selection. The test is not purely random, and nearby units can cross the split. Building-grouped and forward-time tests would be stronger.')
@@ -93,15 +93,15 @@ para('<b>96 Glover Street, Mosman:</b> the listing reports a 379 m² block, shar
 para('<b>13 Lancaster Street, Blacktown:</b> a recent custom-built, multigenerational house is compared with three local sales between $1.235 million and $1.34 million. Construction age and finish quality are missing, so its premium is underestimated. [8]')
 figure('test_errors.png',width=470,caption='Figure 4. Held-out predictions and errors. Rare, expensive sales dominate squared error.')
 
-page(); heading('5. ML, LLM and illustrative estimates')
-para('Ten held-out properties received the same six raw inputs for ML and Codex estimates. LLM answers were frozen before these prices were revealed. Codex had seen earlier market examples, so this was not a fresh-context or equal-training-information experiment. The prompt and protocol are included. Genuine student estimates are missing; the requested invented column was added after outcomes were known.')
+page(); heading('5. ML, LLM and student estimates')
+para('The ten held-out properties use the same six raw input fields. Codex estimates were frozen before their sale prices were revealed, although earlier market examples were available. The student supplied the estimates below on 18 September after seeing actual prices and AI examples. Their information conditions therefore differ: this is a non-blind student comparison, not a controlled test of human forecasting.')
 c=csv('ten_property_comparison.csv')
-table(['ID / suburb','Actual','ML','LLM','AI illustration*'],[[r.comparison_id+' / '+r.suburb,money(r.sale_price_aud),money(r.predicted_price_aud),money(r.llm_estimate_aud),money(r.illustrative_estimate_aud)] for r in c.itertuples()], [116,94,94,94,92])
-para('Table 3. *Post-hoc demonstration values, NOT personal estimates or blind predictions. Addresses and inputs are mapped to these IDs in the notebook and CSV files.',small=True,count=False)
+table(['ID / suburb','Actual','ML','LLM','Student*'],[[r.comparison_id+' / '+r.suburb,money(r.sale_price_aud),money(r.predicted_price_aud),money(r.llm_estimate_aud),money(r.human_estimate_aud)] for r in c.itertuples()], [116,94,94,94,92])
+para('Table 3. *Student-supplied, non-blind estimates. The earlier AI illustrations remain separately labelled in the archive and are not used as student estimates.',small=True,count=False)
 cm=csv('comparison_metrics.csv')
 table(['Approach','MAE','RMSE','R²'],[[r.approach,money(r.mae),money(r.rmse),f'{r.r2:.3f}'] for r in cm.itertuples()], [145,115,125,105])
-para('The LLM has lower MAE, but ML has lower RMSE. Both badly miss the $23 million sale. The LLM is closer for the seven-bedroom Blacktown home; ML is closer for the $5.3 million Mosman home. Neither knows omitted exceptional features. Ten selected cases cannot establish a general winner.')
-para('Human judgement could add inspection knowledge, condition and local comparables, but that benefit is not measured here. A valid human comparison now requires new blinded cases. Invented estimates cannot establish whether a person outperforms either model.')
+para('The student column has the lowest MAE ($2,043,000) and RMSE ($5,601,331), but prior exposure prevents a fair winner claim. It is closest on four cases, LLM on three and ML on three. For example, student estimates are close on C06 and C08; LLM is closest on C05. All three badly underestimate the $23 million sale.')
+para('Among ML and LLM, LLM has lower MAE while ML has lower RMSE. Human judgement could add inspections and local knowledge, but that benefit is not isolated here. ML is reproducible but limited by its training data; LLM estimates can sound plausible without adequate evidence. New unseen properties and estimates recorded before disclosure would provide a stronger comparison.')
 sub('Revisiting the feature expectations')
 para('Validation permutation importance ranks suburb first, then month and bathrooms. The initial guess is partly supported: location leads, but type and bedrooms rank lower. Importance is not causal; correlated features share information, and month may identify the collection pattern rather than price growth.')
 

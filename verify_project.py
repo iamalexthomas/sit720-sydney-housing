@@ -59,5 +59,14 @@ assert list(ranked.head(5).property_id) == list(failures.property_id)
 comparison = pd.read_csv('results/ten_property_comparison.csv')
 assert len(comparison) == 10 and comparison.comparison_id.is_unique
 assert set(comparison.property_id).issubset(set(predictions.property_id))
-assert comparison.human_estimate_aud.isna().all()
+student = pd.read_csv('data/comparison_blind.csv').set_index('comparison_id').human_estimate_aud
+actual_student = comparison.set_index('comparison_id').human_estimate_aud
+assert student.notna().all() and (student > 0).all()
+assert actual_student.sort_index().equals(student.sort_index())
+assert summary['human_complete'] and summary['human_blinded'] is False
+scores = pd.read_csv('results/comparison_metrics.csv').set_index('approach')
+student_scores = scores.loc['Student (non-blind)']
+assert np.isclose(student_scores.mae, mean_absolute_error(comparison.sale_price_aud, comparison.human_estimate_aud))
+assert np.isclose(student_scores.rmse, np.sqrt(mean_squared_error(comparison.sale_price_aud, comparison.human_estimate_aud)))
+assert np.isclose(student_scores.r2, r2_score(comparison.sale_price_aud, comparison.human_estimate_aud))
 print('Saved metrics, five largest errors and held-out comparison checks passed.')

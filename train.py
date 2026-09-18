@@ -255,7 +255,7 @@ comparison.to_csv(ROOT / "results/ten_property_comparison.csv", index=False)
 display(comparison[["comparison_id", "suburb", "sale_price_aud", "predicted_price_aud",
                     "llm_estimate_aud", "human_estimate_aud"]].round(0))
 comparison_scores = []
-for label, column in [("ML", "predicted_price_aud"), ("LLM", "llm_estimate_aud"), ("Human", "human_estimate_aud")]:
+for label, column in [("ML", "predicted_price_aud"), ("LLM", "llm_estimate_aud"), ("Student (non-blind)", "human_estimate_aud")]:
     values = pd.to_numeric(comparison[column], errors="coerce")
     if values.notna().all() and np.isfinite(values).all() and (values > 0).all():
         comparison_scores.append({"approach": label, **metric_row(comparison.sale_price_aud, values)})
@@ -264,7 +264,7 @@ for label, column in [("ML", "predicted_price_aud"), ("LLM", "llm_estimate_aud")
 comparison_metrics = pd.DataFrame(comparison_scores)
 comparison_metrics.to_csv(ROOT / "results/comparison_metrics.csv", index=False)
 display(comparison_metrics.round(3))
-print("Do not infer a human ranking until genuine personal estimates are supplied.")
+print("Student estimates were supplied after price/example disclosure; scores do not establish independent human superiority.")
 
 illustrative = pd.read_csv(ROOT / "data/illustrative_estimates.csv")
 comparison = comparison.merge(illustrative, on="comparison_id", validate="one_to_one")
@@ -279,7 +279,8 @@ metadata = {"selected_model": best_name, "development_n": len(train), "test_n": 
             "training_min_date": str(train.sale_date.min().date()),
             "training_max_date": str(train.sale_date.max().date()),
             "training_min_price": int(y_train.min()), "training_max_price": int(y_train.max()),
-            "human_complete": bool(human.human_estimate_aud.notna().all())}
+            "human_complete": bool(human.human_estimate_aud.notna().all()),
+            "human_blinded": False}
 (ROOT / "results/summary.json").write_text(json.dumps(metadata, indent=2))
 print("Saved fitted model and results.")
 print("Selected model:", best_name)

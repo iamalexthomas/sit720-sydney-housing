@@ -24,5 +24,6 @@
   "training_max_date": "2026-09-15",
   "training_min_price": 320000,
   "training_max_price": 11550000,
-  "human_complete": false
+  "human_complete": true,
+  "human_blinded": false
 }

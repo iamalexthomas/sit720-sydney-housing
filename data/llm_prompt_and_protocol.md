@@ -8,8 +8,8 @@ The ten estimates were recorded before the selected targets were unmasked and be
 
 Selection: two previously unseen Parramatta records, the first four eligible Blacktown page-3 records, and the first four previously unseen Mosman house records with disclosed prices. This is a convenience comparison with extra houses, not a random benchmark of Sydney.
 
-Human estimates remain blank until the student supplies them. Do not replace them with an algorithm or another LLM and call them human judgement.
+The original human column was blank when the LLM predictions were frozen. The student supplied ten estimates on 18 September after disclosure of prices and AI examples. See `student_estimate_protocol.md` for this non-blind protocol.
 
 ## User-requested illustrative estimates
 
-The student asked the assistant to make its own data instead of providing personal estimates. `illustrative_estimates.csv` therefore contains explicitly AI-generated, rounded demonstration values. They were added after outcomes were available and are NOT a blinded human experiment. Their errors may be calculated to demonstrate the table, but they cannot support a conclusion about human skill. The original `human_estimate_aud` column stays empty. The task's genuine human-judgement requirement remains unmet.
+The student asked the assistant to make its own data instead of providing personal estimates. `illustrative_estimates.csv` therefore contains explicitly AI-generated, rounded demonstration values. They were added after outcomes were available and are NOT a blinded human experiment. Their errors may be calculated to demonstrate the table, but they cannot support a conclusion about human skill. These examples are retained separately. The `human_estimate_aud` column now contains the actual student-supplied values, not these illustrative values; that later comparison is non-blind.

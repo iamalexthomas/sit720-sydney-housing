@@ -4,9 +4,9 @@ Beginner-style worked project using 119 real sold-property records: Parramatta 3
 
 ## Before submitting
 
-Two task requirements still need attention:
+Before submitting, note these limitations:
 
-1. The student requested invented estimates instead of supplying personal estimates. They are labelled **AI-generated illustrative estimates**, not human judgement. Genuine personal estimates were not collected. The report must not claim that Part 5 demonstrates human performance. If completing this properly later, use a NEW blinded set of properties because the current outcomes are now available.
+1. The student supplied all ten personal estimates. They were supplied after actual prices and AI examples had been shown, so they are labelled **non-blind student estimates**. The comparison is complete as a descriptive table, but it does not demonstrate independent human forecasting. `data/student_estimate_protocol.md` records the conditions.
 2. The standalone GenAI acknowledgement was removed at the student's request. The task sheet asks for an acknowledgement, so this requirement is currently unmet.
 
 Review the analysis and sources and understand the code. `NOTES_GUIDE.md` connects the project to every supplied notes screenshot and provides viva questions. The student's own reflections and data verification are still important.
@@ -17,7 +17,7 @@ Review the analysis and sources and understand the code. `NOTES_GUIDE.md` connec
 - `output/pdf/SIT720_8_1D_report.pdf`: concise report with plots, error cases, comparison, screenshots, references and code extracts.
 - `data/housing_sales.csv`: real listing-reported sold-property facts, sources and dates.
 - `data/collection_log.md`: collection method, exclusions, inconsistencies and biases.
-- `data/comparison_blind.csv`: original features and empty genuine-human estimate column.
+- `data/comparison_blind.csv`: original features and student-supplied estimate column; historical filename, non-blind estimates.
 - `data/llm_estimates.csv`: predictions frozen before selected prices were revealed.
 - `data/illustrative_estimates.csv`: AI-generated demonstration values requested by the student; NOT human estimates.
 - `train.py`: Python equivalent of the notebook's code cells.

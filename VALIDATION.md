@@ -14,7 +14,7 @@ Rechecked on 18 September 2026 using the versions in requirements.txt.
 - PDF pages were rendered and visually inspected for layout, table alignment and legibility.
 - The ZIP excludes Git history, environment directories, temporary browser extracts and credentials.
 
-Known handover gaps: no genuine human estimates; standalone GenAI acknowledgement removed at student request. The public GitHub repository now supplies the source/data sharing link. See README.md before submission. Generated illustrative estimates do not satisfy the task's personal-estimate requirement.
+Known handover limitation: student estimates were supplied after disclosure of actual prices and AI examples; the standalone GenAI acknowledgement remains removed at student request. The public GitHub repository now supplies the source/data sharing link. See README.md before submission. Generated illustrative estimates do not satisfy the task's personal-estimate requirement.
 
 ## GitHub Pages verification - 18 September 2026
 
@@ -25,4 +25,8 @@ Known handover gaps: no genuine human estimates; standalone GenAI acknowledgemen
 - The publicly served model.json exactly matched the locally validated model.
 - The full notebook was rerun: all 15 code cells completed without error.
 - Saved test metrics, top-five failure ordering and held-out comparison membership were independently recomputed and checked.
-- Final report: 1,185 narrative words; all eight pages rendered and visually checked; footer and standalone acknowledgement removed as requested.
+- Final report: 1,216 narrative words; all eight pages rendered and visually checked; footer and standalone acknowledgement removed as requested.
+
+## Student estimates added - 18 September 2026
+
+The ten user-supplied amounts were copied unchanged. The notebook was rerun and the exact values, three-way comparison metrics and held-out membership were verified. Student MAE is $2,043,000; RMSE is $5,601,330.65; R-squared is 0.26549. The student column is explicitly non-blind because actual prices and AI examples were already disclosed. The fitted model and ML/LLM predictions are unchanged.
