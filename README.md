@@ -19,7 +19,6 @@ SIT720 Task 8.1D compares K-nearest neighbours, a decision tree and random fores
 | `site/dist/` | Static web application and exported model |
 | `export_model.py` | Export the fitted KNN model for browser prediction |
 | `verify_project.py` | Data, split, prediction and endpoint checks |
-| `build_report.py`, `package_submission.py` | Rebuild the report and submission ZIP |
 
 ## Setup
 
@@ -39,11 +38,9 @@ On Windows, activate the environment with `.venv\Scripts\activate`. Open the not
 python train.py
 python export_model.py
 python verify_project.py
-python build_report.py
-python package_submission.py
 ```
 
-Verification also requires Node.js. The dataset is included, so training and prediction do not require live listing downloads or API keys. The report uses the saved results and figures. The ZIP is written to the parent directory.
+Verification also requires Node.js. The dataset is included, so training and prediction do not require live listing downloads or API keys. The final report is provided in `output/pdf/`.
 
 Preprocessing is fitted within each cross-validation fold. The split uses seed 42 and includes ten preselected comparison properties plus fourteen additional cases sampled by suburb. Model selection uses development cross-validation; the saved model is trained on the 95 development properties.
 
