@@ -51,7 +51,7 @@ heading('Sydney housing price prediction')
 para('SIT720 Task 8.1D | 18 September 2026', small=True, count=False)
 sub('1. Problem and data collection')
 para('This project evaluates regression methods for predicting residential sale prices in Australian dollars. Parramatta, Blacktown and Mosman were selected as contrasting purchasing locations. The Parramatta sample consists mainly of apartments, Blacktown includes houses and apartments, and Mosman contains higher-priced properties. These differences allow the analysis to examine how location, dwelling type and accommodation relate to sale prices.')
-para('The dataset contains 119 sold properties: 37 in Parramatta, 43 in Blacktown and 39 in Mosman. Sale information was transcribed from Domain and realestate.com.au listings. Each record includes its source URL and access date to support traceability. The reported prices are listing information rather than independently verified settlement records.')
+para('The dataset contains 119 sold properties: 37 in Parramatta, 43 in Blacktown and 39 in Mosman. Sale information was transcribed from Domain and realestate.com.au listings [1, 2]. Each record includes its source URL and access date to support traceability. The reported prices are listing information rather than independently verified settlement records.')
 table(['Recorded fields', 'Use'], [['Sale price (AUD)', 'Prediction target'],['Suburb, type, bedrooms, bathrooms, parking, sale date','Model inputs'],['Address, advertised area, source, access date, property ID','Checking and traceability; excluded from prediction']], [250,240])
 para('Collection problems included withheld prices, missing parking, inconsistent area definitions and changing listing details. Withheld-price and retirement listings were excluded. Missing parking stays unknown. Advertised area is retained for checking but excluded because it mixes land, floor and whole-building area. All 119 transcriptions were checked against the viewed listing text; this does not independently verify settlement records.')
 para('The sample is convenient rather than random. Disclosed prices may be selective, several units share buildings, and the Mosman house search was supplemented separately. Results should not be presented as official suburb statistics or as reliable estimates for all Sydney properties.')
@@ -69,10 +69,10 @@ figure('price_distribution.png',caption='Figure 1. Development data only. The ri
 para('Development median prices are $572,000 in Parramatta, $854,000 in Blacktown and $2,152,500 in Mosman. Prices are right-skewed. Expensive genuine sales are retained; removing them would conceal important failures.')
 figure('time_and_bedrooms.png',caption='Figure 2. Sale dates and bedrooms. Older observations are mainly Mosman homes.')
 para('The date plot cannot establish a market trend because suburb and property mix change over time. Before engineering, the expected three strongest inputs were suburb, property type and bedrooms: market location, dwelling form and accommodation. Month index and bathrooms per bedroom were then added without using prices; studios use a denominator of one.')
-para('Within each cross-validation fold, missing numeric inputs use the training median, numeric features are standardised, and categories are one-hot encoded. This prevents preprocessing leakage. Scaling is essential for distance-based KNN. Address and listing identifiers are excluded.')
+para('Within each cross-validation fold, missing numeric inputs use the training median, numeric features are standardised, and categories are one-hot encoded. This prevents preprocessing leakage. Scaling is essential for distance-based KNN. Address and listing identifiers are excluded. [10]')
 
 page(); heading('3. Model development and evaluation')
-para('Three regression approaches were selected: KNN for similarity-based prediction, a decision tree for interpretable nonlinear rules, and random forest for variance reduction through averaging. Random forest was expected to perform best before training, although its predictions are less transparent than a single tree. Five shuffled folds evaluate a small parameter grid using MAE. RMSE emphasises large errors, while R-squared measures performance relative to a mean-price baseline.')
+para('Three regression approaches were selected: KNN for similarity-based prediction, a decision tree for interpretable nonlinear rules, and random forest for variance reduction through averaging. Random forest was expected to perform best before training, although its predictions are less transparent than a single tree. Five shuffled folds evaluate a small parameter grid using MAE. RMSE emphasises large errors, while R-squared measures performance relative to a mean-price baseline. [9, 11]')
 cv=csv('cross_validation.csv')
 table(['Model', 'CV MAE', 'CV RMSE', 'CV R²', 'Train MAE'],[[r.model,money(r.cv_mae),money(r.cv_rmse),f'{r.cv_r2:.3f}',money(r.train_mae)] for r in cv.itertuples()], [96,100,100,70,124])
 para('Table 1. Mean fold scores at selected settings: KNN k=3; tree unrestricted depth/minimum leaf 3; forest 200 trees, unrestricted depth, minimum leaf 2 and max_features=0.8. KNN k=3/5/9, tree depth 2/4/unrestricted and forest depth 4/unrestricted were tested.',small=True,count=False)
@@ -85,11 +85,11 @@ para('KNN outperformed the median baseline on the test set, but its large absolu
 page(); heading('4. Investigating the five largest errors')
 f=csv('five_largest_errors.csv')
 table(['Property', 'Actual', 'KNN estimate', 'Absolute error'],[[r.address,money(r.sale_price_aud),money(r.predicted_price_aud),money(abs(r.predicted_price_aud-r.sale_price_aud))] for r in f.itertuples()], [185,100,100,105])
-para('<b>17 Morella Road, Mosman:</b> the $23 million luxury sale exceeds the highest training price ($11.55 million). Neighbour averaging cannot reach it. Harbour views, architectural design and bay access are missing. The retained sold-card bathroom count is three; a current profile says four.')
-para('<b>10 Cyprian Street, Mosman:</b> views, a pool and rebuilding potential are absent. Its encoded inputs match Morella exactly, including March 2026, so both receive $5.391 million despite very different outcomes.')
-para('<b>53-53A Pelleas Street, Blacktown:</b> seven bedrooms and four bathrooms attract inappropriate neighbours: two Mosman houses at $9 million and $3.9 million, alongside a $1.5 million local house. The model misses the local context of this dual-living home.')
-para('<b>96 Glover Street, Mosman:</b> the listing reports a 379 m² block, shared driveway and $3,600 quarterly strata charges. These omitted details could help explain the overestimate. One neighbour costs $8.7 million. This is a plausible explanation, not a proven causal effect.')
-para('<b>13 Lancaster Street, Blacktown:</b> a recent custom-built, multigenerational house is compared with three local sales between $1.235 million and $1.34 million. Construction age and finish quality are missing, so its premium is underestimated.')
+para('<b>17 Morella Road, Mosman:</b> the $23 million luxury sale exceeds the highest training price ($11.55 million). Neighbour averaging cannot reach it. Harbour views, architectural design and bay access are missing. The retained sold-card bathroom count is three; a current profile says four. [3, 4]')
+para('<b>10 Cyprian Street, Mosman:</b> views, a pool and rebuilding potential are absent. Its encoded inputs match Morella exactly, including March 2026, so both receive $5.391 million despite very different outcomes. [5]')
+para('<b>53-53A Pelleas Street, Blacktown:</b> seven bedrooms and four bathrooms attract inappropriate neighbours: two Mosman houses at $9 million and $3.9 million, alongside a $1.5 million local house. The model misses the local context of this dual-living home. [6]')
+para('<b>96 Glover Street, Mosman:</b> the listing reports a 379 m² block, shared driveway and $3,600 quarterly strata charges. These omitted details could help explain the overestimate. One neighbour costs $8.7 million. This is a plausible explanation, not a proven causal effect. [7]')
+para('<b>13 Lancaster Street, Blacktown:</b> a recent custom-built, multigenerational house is compared with three local sales between $1.235 million and $1.34 million. Construction age and finish quality are missing, so its premium is underestimated. [8]')
 figure('test_errors.png',width=470,caption='Figure 4. Held-out predictions and errors. Rare, expensive sales dominate squared error.')
 
 page(); heading('5. Comparison of valuation approaches')
@@ -112,7 +112,7 @@ figure('app_prediction.png',width=410,caption='Figure 6. Prediction for a Parram
 access_note = 'The app is publicly hosted on GitHub Pages and requires no sign-in.' if on_github_pages else 'The hosted version is owner-private; tutor access must be arranged separately.'
 para('Choose suburb and type, enter room counts, parking and date, then click Predict price. Zero bedrooms means studio; blank parking means unknown. The app displays the estimate, model description and test error. Dates beyond training coverage trigger a warning. ' + access_note,small=True)
 
-page(); heading('Reproduction and reflection')
+page(); heading('Reproduction, reflection and sources')
 sub('Build and run')
 code('''python -m venv .venv
 source .venv/bin/activate
@@ -126,6 +126,21 @@ para('Use the extracted project folder. On Windows activate with .venv\\Scripts\
 sub('Reflection')
 para('The main finding is that data coverage and feature quality constrain performance more than model complexity alone. Random forest did not achieve the expected advantage, and KNN\'s favourable cross-validation result did not prevent large test errors. Missing information about area, views, condition and ownership costs limits the relationships available to each model. Further work should prioritise consistent property details, building-grouped splits and forward-time evaluation.')
 para('Deployment required identical preprocessing and distance tie handling in Python and JavaScript. A simple interface makes the prediction process accessible, but additional computing alone cannot compensate for missing information. Suburb may reflect historic inequality, while selective disclosure may underrepresent particular housing types. Test MAE was $100,278 for Parramatta, $504,389 for Blacktown and $2,636,093 for Mosman. With only six to nine cases per group, these results cannot establish fairness or justify lending decisions.')
+sub('References')
+refs=[
+('1. Domain sold listings: Parramatta and Blacktown; exact page URLs in housing_sales.csv','https://www.domain.com.au/sold-listings/parramatta-nsw-2150/'),
+('2. realestate.com.au sold listings: Mosman; exact page URLs in housing_sales.csv','https://www.realestate.com.au/sold/in-nsw-mosman/list-1'),
+('3. Morella Road sold listing','https://www.realestate.com.au/sold/property-house-nsw-mosman-149267976'),
+('4. Morella Road current profile (bathroom discrepancy)','https://www.domain.com.au/property-profile/17-morella-road-mosman-nsw-2088'),
+('5. Cyprian Street sold listing','https://www.realestate.com.au/sold/property-house-nsw-mosman-150397796'),
+('6. Pelleas Street sold listing','https://www.domain.com.au/53-53a-pelleas-street-blacktown-nsw-2148-2020916590'),
+('7. Glover Street sold listing','https://www.realestate.com.au/sold/property-house-nsw-mosman-150415760'),
+('8. Lancaster Street sold listing','https://www.domain.com.au/13-lancaster-street-blacktown-nsw-2148-2021028342'),
+('9. scikit-learn: cross-validation','https://scikit-learn.org/stable/modules/cross_validation.html'),
+('10. scikit-learn: leakage and common pitfalls','https://scikit-learn.org/stable/common_pitfalls.html'),
+('11. scikit-learn: ensemble methods','https://scikit-learn.org/stable/modules/ensemble.html')]
+for label,url in refs: para(link(url,label) if url else escape(label), small=True,count=False)
+
 page(); heading('Appendix: core code')
 para('Core steps adapted from train.py. The executed notebook and all source files in the archive contain the complete workflow, outputs, plots and application. See stable_knn.py for deterministic tie handling.',small=True,count=False)
 # Use compact, faithful extracts rather than shrinking the full notebook to unreadable text.
@@ -170,6 +185,6 @@ table(['File','Responsibility'],[['app.py','Serve the page and POST /api/predict
 doc=SimpleDocTemplate(str(OUT/'SIT720_8_1D_report.pdf'), pagesize=A4, rightMargin=48,leftMargin=48,topMargin=40,bottomMargin=42, title='SIT720 8.1D - Sydney housing prices',author='SIT720 project')
 doc.build(story)
 words=len(' '.join(narrative).split())
-(ROOT/'results/report_word_count.txt').write_text(f'Approximate narrative word count: {words}\nExcludes tables, figure captions, code and setup instructions.\n')
+(ROOT/'results/report_word_count.txt').write_text(f'Approximate narrative word count: {words}\nExcludes tables, figure captions, code, references and setup instructions.\n')
 print('Report created:',OUT/'SIT720_8_1D_report.pdf')
 print('Approximate narrative words:',words)
