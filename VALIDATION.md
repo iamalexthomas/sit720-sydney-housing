@@ -1,6 +1,6 @@
 # Verification record
 
-Checked on 17 September 2026 using the versions in requirements.txt.
+Rechecked on 18 September 2026 using the versions in requirements.txt.
 
 - 119 distinct sold-property rows; all three suburbs have at least 30 rows.
 - All 119 transcriptions matched the viewed source-card text. Source provenance and ambiguities are recorded in data/collection_log.md. This checks transcription, not independent settlement records.
@@ -14,4 +14,15 @@ Checked on 17 September 2026 using the versions in requirements.txt.
 - PDF pages were rendered and visually inspected for layout, table alignment and legibility.
 - The ZIP excludes Git history, environment directories, temporary browser extracts and credentials.
 
-Known handover gaps: no genuine human estimates, no externally shared archive URL, and the app currently requires owner sign-in. See README.md before submission. Generated illustrative estimates do not satisfy the task's personal-estimate requirement.
+Known handover gaps: no genuine human estimates; standalone GenAI acknowledgement removed at student request. The public GitHub repository now supplies the source/data sharing link. See README.md before submission. Generated illustrative estimates do not satisfy the task's personal-estimate requirement.
+
+## GitHub Pages verification - 18 September 2026
+
+- Public repository: https://github.com/iamalexthomas/sit720-sydney-housing
+- Public application: https://iamalexthomas.github.io/sit720-sydney-housing/
+- GitHub Actions deployment succeeded.
+- In an isolated signed-out browser, the page loaded without authentication and the example form returned **$692,333**, with no input errors or observed browser runtime errors.
+- The publicly served model.json exactly matched the locally validated model.
+- The full notebook was rerun: all 15 code cells completed without error.
+- Saved test metrics, top-five failure ordering and held-out comparison membership were independently recomputed and checked.
+- Final report: 1,185 narrative words; all eight pages rendered and visually checked; footer and standalone acknowledgement removed as requested.

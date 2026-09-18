@@ -1,7 +1,7 @@
 {
-  "application_url": "https://sydney-housing-ml-alex-2026.iamalexthomas28.chatgpt.site",
-  "archive_url": "",
-  "archive_status": "Upload SIT720_8_1D_submission.zip to OneDrive or Dropbox and paste a viewable sharing link here before final submission.",
-  "application_access": "Owner-private; marker access must be arranged separately",
-  "github_pages_status": "Deployment workflow prepared; GitHub authentication in progress."
+  "application_url": "https://iamalexthomas.github.io/sit720-sydney-housing/",
+  "archive_url": "https://github.com/iamalexthomas/sit720-sydney-housing",
+  "archive_status": "Public GitHub repository contains dataset, source, notebook, model and report.",
+  "application_access": "Public GitHub Pages; no sign-in required",
+  "github_pages_status": "Published successfully; public browser prediction verified on 18 September 2026."
 }

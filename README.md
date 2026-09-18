@@ -7,9 +7,9 @@ Beginner-style worked project using 119 real sold-property records: Parramatta 3
 Two task requirements still need attention:
 
 1. The student requested invented estimates instead of supplying personal estimates. They are labelled **AI-generated illustrative estimates**, not human judgement. Genuine personal estimates were not collected. The report must not claim that Part 5 demonstrates human performance. If completing this properly later, use a NEW blinded set of properties because the current outcomes are now available.
-2. Upload the ZIP to OneDrive/Dropbox with viewing access for the marker (or a GitHub repository) and enter its accessible URL in `submission_links.json`. Run `python build_report.py` to include it in the PDF. The privately hosted application URL is separate and is not a substitute for this required archive link.
+2. The standalone GenAI acknowledgement was removed at the student's request. The task sheet asks for an acknowledgement, so this requirement is currently unmet.
 
-Review the analysis and sources and understand the code. The standalone GenAI acknowledgement was removed at the student's request; the task sheet requires an acknowledgement, so that submission requirement is currently unmet. `NOTES_GUIDE.md` connects the project to every supplied notes screenshot and provides viva questions. The student's own reflections and data verification are still important.
+Review the analysis and sources and understand the code. `NOTES_GUIDE.md` connects the project to every supplied notes screenshot and provides viva questions. The student's own reflections and data verification are still important.
 
 ## Files
 
@@ -57,9 +57,11 @@ The HTML page runs the exported KNN pipeline locally in the browser. The Flask v
 
 A build-free alternative is `python -m http.server 8000 --directory site/dist`, then open `http://127.0.0.1:8000`. Do not double-click index.html because the browser must load model.json through HTTP. Host the entire `site/dist` directory on a static host to deploy the browser version. It needs no Python server or API key on the host.
 
-Hosted application: https://sydney-housing-ml-alex-2026.iamalexthomas28.chatgpt.site
+Hosted application: https://iamalexthomas.github.io/sit720-sydney-housing/
 
-The included hosted application uses Sites and is owner-private. To share with a tutor, adjust its access or deploy the static folder to an accessible host; check the link from a signed-out browser. This does not upload the required archive to OneDrive/Dropbox automatically.
+Dataset and source repository: https://github.com/iamalexthomas/sit720-sydney-housing
+
+The GitHub Pages application is public. The repository includes the dataset, executed notebook, model, source and PDF, and provides the accessible GitHub alternative requested in the task sheet.
 
 ## Rebuild the report and ZIP
 
@@ -78,4 +80,4 @@ The data are an AI-assisted manual transcription of public listing cards, not in
 
 ## GitHub Pages
 
-A ready-to-run deployment workflow is included at `.github/workflows/pages.yml`. See `GITHUB_PAGES.md` for the repository layout and setup. It has not yet been deployed to GitHub Pages.
+A ready-to-run deployment workflow is included at `.github/workflows/pages.yml`. See `GITHUB_PAGES.md` for the repository layout and setup. The workflow publishes the static predictor from `site/dist`.

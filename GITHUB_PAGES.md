@@ -1,6 +1,10 @@
 # Publish on GitHub Pages
 
-The app is ready for GitHub Pages, but it has not been published there yet. This session had no connected GitHub tool, authenticated GitHub CLI or usable signed-in browser.
+Repository: https://github.com/iamalexthomas/sit720-sydney-housing
+
+Application: https://iamalexthomas.github.io/sit720-sydney-housing/
+
+The following instructions reproduce this deployment in a different repository.
 
 The included workflow publishes only `site/dist`. Its relative asset URLs work at a project URL such as `https://USERNAME.github.io/REPOSITORY/`. No Python server, paid API or secret is required for the hosted predictor.
 

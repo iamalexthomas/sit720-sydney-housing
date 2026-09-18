@@ -48,7 +48,7 @@ def csv(name): return pd.read_csv(ROOT / 'results' / name)
 def link(url, label): return f'<link href="{escape(url, {chr(34): "&quot;"})}" color="#175b8a">{escape(label)}</link>'
 
 heading('SIT720 Task 8.1D: Sydney housing prices')
-para('Machine learning mini project | 17 September 2026', small=True, count=False)
+para('Machine learning mini project | 18 September 2026', small=True, count=False)
 sub('1. Problem and data collection')
 para('This project predicts a property sale price in Australian dollars. Parramatta, Blacktown and Mosman were selected and confirmed as contrasting buying options. The collected Parramatta sample is mainly apartments, Blacktown mixes houses and apartments, and Mosman includes much more expensive homes. Location, accommodation and property type may therefore affect prices.')
 para('The dataset contains 119 sold properties: 37 Parramatta, 43 Blacktown and 39 Mosman. Listing facts were manually transcribed by the AI assistant from Domain and realestate.com.au on 16 September 2026. Every row has a source URL. This is not a claim that the student personally collected or independently verified the sales.')
@@ -62,7 +62,7 @@ on_github_pages = '.github.io/' in app_url
 app_label = 'Open the housing predictor on GitHub Pages' if on_github_pages else 'Open the deployed housing predictor (owner-private)'
 para('Application: '+ (link(app_url,app_label) if app_url else 'See README for local launch.'), count=False)
 para('Dataset and source archive: '+ (link(archive_url,'Open the submission archive') if archive_url else '<b>Accessible archive URL not yet supplied.</b> Upload the included ZIP to OneDrive/Dropbox or GitHub and add its link in submission_links.json, then rebuild this report.'), small=True, count=False)
-para('<b>Part 5 limitation:</b> genuine personal estimates were not supplied. Requested invented values are labelled AI illustrations. This report does not claim a completed human-performance comparison. These two items need attention before submission.',small=True,count=False)
+para('<b>Part 5 limitation:</b> genuine personal estimates were not supplied. Requested invented values are labelled AI illustrations. This report does not claim a completed human-performance comparison. This personal-estimate requirement remains incomplete.',small=True,count=False)
 
 page(); heading('2. Understanding and preparing the data')
 para('A fixed split reserves 24 test properties: ten preselected comparison cases and fourteen additional cases sampled by suburb with seed 42. The remaining 95 support exploration and model selection. The test is not purely random, and nearby units can cross the split. Building-grouped and forward-time tests would be stronger.')
@@ -73,7 +73,7 @@ para('The date plot cannot establish a market trend because suburb and property 
 para('Within each cross-validation fold, missing numeric inputs use the training median, numeric features are standardised, and categories are one-hot encoded. This prevents preprocessing leakage. Scaling is essential for distance-based KNN. Address and listing identifiers are excluded.')
 
 page(); heading('3. Model development and evaluation')
-para('KNN averages similar sales, a decision tree learns rules, and random forest averages many trees. Before training, forest was expected to win because averaging can reduce tree variance and capture interactions. Five shuffled folds compare a small parameter grid using MAE. RMSE highlights large errors; R-squared compares squared error with a mean-price baseline.')
+para('KNN averages similar sales but can choose poor comparables. A decision tree learns readable rules but can overfit. Random forest averages many trees but is less transparent. Before training, forest was expected to win because averaging can reduce tree variance and capture interactions. Five shuffled folds compare a small parameter grid using MAE. RMSE highlights large errors; R-squared compares squared error with a mean-price baseline.')
 cv=csv('cross_validation.csv')
 table(['Model', 'CV MAE', 'CV RMSE', 'CV R²', 'Train MAE'],[[r.model,money(r.cv_mae),money(r.cv_rmse),f'{r.cv_r2:.3f}',money(r.train_mae)] for r in cv.itertuples()], [96,100,100,70,124])
 para('Table 1. Mean fold scores at selected settings: KNN k=3; tree unrestricted depth/minimum leaf 3; forest 200 trees, unrestricted depth, minimum leaf 2 and max_features=0.8. KNN k=3/5/9, tree depth 2/4/unrestricted and forest depth 4/unrestricted were tested.',small=True,count=False)
@@ -126,7 +126,7 @@ python app.py''')
 para('Use the extracted project folder. On Windows activate with .venv\\Scripts\\activate. Open http://127.0.0.1:5000. For notebook outputs, select this environment in Jupyter/VS Code and run all cells. The static folder site/dist can also be hosted directly. Verification needs Node.js. Full setup and archive instructions are in README.md.',small=True,count=False)
 sub('Reflection')
 para('My main takeaway is that better data matters more than a more complicated model. I expected random forest to perform best, but KNN had the lowest cross-validation MAE. Its large test errors show why I should not rely on one score. Missing area, views, condition and ownership costs limit what the model can learn. I would collect more consistent property details and use building-grouped and time-based tests before trusting it on new sales.')
-para('I would keep the app simple so its inputs and limitations are easy to understand. Deploying it also shows why preprocessing must match training exactly. More computing power alone would not fix missing information. Suburb can reflect historic inequality, and selective listings can favour some housing types. I would compare errors across groups and avoid using this prototype for lending or decisions about access to housing.')
+para('I would keep the app simple so its inputs and limitations are easy to understand. Deploying it also shows why preprocessing must match training exactly. More computing power alone would not fix missing information. Suburb can reflect historic inequality, and selective listings can favour some housing types. Test MAE is about $100,278 for Parramatta, $504,389 for Blacktown and $2,636,093 for Mosman. Each group has only six to nine test cases, so this does not establish fairness. I would avoid using this prototype for lending or decisions about access to housing.')
 sub('References (accessed 16–17 September 2026)')
 refs=[
 ('1. SIT720 supplied task sheet and all Week 8/9 note screenshots',''),

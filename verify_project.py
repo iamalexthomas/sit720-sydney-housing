@@ -40,3 +40,24 @@ code_cells = [c for c in nb.cells if c.cell_type == "code"]
 assert all(c.execution_count is not None for c in code_cells)
 assert not any(o.output_type == "error" for c in code_cells for o in c.outputs)
 print("Data, split and executed notebook checks passed.")
+
+# Check that the saved headline scores and failure cases match predictions.
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+predictions = pd.read_csv('results/test_predictions.csv')
+summary = json.loads(Path('results/summary.json').read_text())
+y = predictions.sale_price_aud
+p = predictions.predicted_price_aud
+calculated = {'mae': mean_absolute_error(y, p),
+              'rmse': np.sqrt(mean_squared_error(y, p)),
+              'r2': r2_score(y, p)}
+for key, value in calculated.items():
+    assert np.isclose(value, summary['test_metrics'][key])
+assert set(predictions.property_id) == set(split.loc[split['split'] == 'test', 'property_id'])
+ranked = predictions.assign(error=(p-y).abs()).sort_values('error', ascending=False)
+failures = pd.read_csv('results/five_largest_errors.csv')
+assert list(ranked.head(5).property_id) == list(failures.property_id)
+comparison = pd.read_csv('results/ten_property_comparison.csv')
+assert len(comparison) == 10 and comparison.comparison_id.is_unique
+assert set(comparison.property_id).issubset(set(predictions.property_id))
+assert comparison.human_estimate_aud.isna().all()
+print('Saved metrics, five largest errors and held-out comparison checks passed.')
